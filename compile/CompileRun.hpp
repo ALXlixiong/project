@@ -155,6 +155,12 @@ class Compiler
     }
     static bool compile(const std::string& file_name)
     {
+      //判断文件是否包含可以关键字，fork/system。。。
+      if(!ProtectUtil::JudgeIsWord(ScrPath(file_name))){
+        const std::string errorString = "code include fork/system...";
+        FileUtil::Write(CompileErrorPath(file_name),errorString);
+        return false;
+      }
       //创建子进程
       //父进程等待
       //子进程程序替换

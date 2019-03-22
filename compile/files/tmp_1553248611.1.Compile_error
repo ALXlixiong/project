@@ -1,0 +1,4 @@
+./files/tmp_1553248611.1.cpp: In function ‘int main()’:
+./files/tmp_1553248611.1.cpp:4:8: error: ‘fork’ was not declared in this scope
+   fork();
+        ^

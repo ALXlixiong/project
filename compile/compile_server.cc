@@ -44,7 +44,7 @@ int main()
   //这条语句为了让浏览器访问到静态页面
   //静态页面：每个用户访问都一样
   //动态页面：随着用户访问要求，不断发生变化
-  ser.set_base_dir("./wwwroot");
-  ser.listen("192.168.60.128",9000);
+  ser.set_base_dir("./compile_root");
+  ser.listen("0.0.0.0",9000);
   return 0;
 }

@@ -187,3 +187,23 @@ class UrlUtil
       return strTemp;  
     }  
 };
+
+//黑名单保护机制
+//判断源文件内部是否存在特殊关键词如fork、system等
+class ProtectUtil
+{
+  public:
+    static bool JudgeIsWord(const std::string& file_name)
+    {
+      std::string content = "";
+      FileUtil::Read(file_name,&content);
+      std::cout<<content<<std::endl;
+      if(content.find("fork()") != std::string::npos || content.find("system") != std::string::npos)
+      {
+        LOG(ERROR)<<"source file include fork/system..."<<std::endl;
+        return false;
+      }
+      std::cout<<"no include"<<std::endl;
+      return true;
+    }
+};
