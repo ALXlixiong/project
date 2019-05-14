@@ -1,0 +1,46 @@
+./files/tmp_1557816111.1.cpp: In function ‘void Test1()’:
+./files/tmp_1557816111.1.cpp:4:5: error: ‘Solution’ was not declared in this scope
+     Solution s;
+     ^
+./files/tmp_1557816111.1.cpp:6:5: error: ‘vector’ was not declared in this scope
+     vector<int> nums{2,7,11,15};
+     ^
+./files/tmp_1557816111.1.cpp:6:12: error: expected primary-expression before ‘int’
+     vector<int> nums{2,7,11,15};
+            ^
+./files/tmp_1557816111.1.cpp:8:12: error: expected primary-expression before ‘int’
+     vector<int> ret = s.twoSum(nums,target);
+            ^
+./files/tmp_1557816111.1.cpp:9:12: error: expected primary-expression before ‘int’
+     vector<int> tmp{0,1};
+            ^
+./files/tmp_1557816111.1.cpp:10:8: error: ‘tmp’ was not declared in this scope
+     if(tmp.size() != ret.size()){
+        ^
+./files/tmp_1557816111.1.cpp:10:22: error: ‘ret’ was not declared in this scope
+     if(tmp.size() != ret.size()){
+                      ^
+./files/tmp_1557816111.1.cpp:12:9: error: ‘cout’ was not declared in this scope
+         cout<<"test case 1 fail"<<endl;
+         ^
+./files/tmp_1557816111.1.cpp:12:35: error: ‘endl’ was not declared in this scope
+         cout<<"test case 1 fail"<<endl;
+                                   ^
+./files/tmp_1557816111.1.cpp:13:15: error: ‘exit’ was not declared in this scope
+         exit(1);
+               ^
+./files/tmp_1557816111.1.cpp:18:17: error: ‘cout’ was not declared in this scope
+                 cout<<"test case 1 fail"<<endl;
+                 ^
+./files/tmp_1557816111.1.cpp:18:43: error: ‘endl’ was not declared in this scope
+                 cout<<"test case 1 fail"<<endl;
+                                           ^
+./files/tmp_1557816111.1.cpp:19:23: error: ‘exit’ was not declared in this scope
+                 exit(1);
+                       ^
+./files/tmp_1557816111.1.cpp:23:5: error: ‘cout’ was not declared in this scope
+     cout<<"This time, the test case passed !"<<endl;
+     ^
+./files/tmp_1557816111.1.cpp:23:48: error: ‘endl’ was not declared in this scope
+     cout<<"This time, the test case passed !"<<endl;
+                                                ^

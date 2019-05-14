@@ -1,0 +1,14 @@
+<html>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>question.{{id}}</title>
+    <head>
+    </head>
+    <body>
+        <div>{{id}}.{{name}}.{{star}}</div>
+        <div><pre>{{describe}}</pre></div>
+            <form action="/compile/{{id}}" method="POST">
+        <textarea type="text" style="height:800px" name="code"rows=30 cols=100>{{structure}}</textarea>
+        <input type="submit" value="Submit">
+        </form>
+    </body>
+</html>

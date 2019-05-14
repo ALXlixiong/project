@@ -19,9 +19,15 @@ class Question{
 
 //将题目加载到内存，通过哈希组织
 //
+struct cmp{
+  bool operator()(std::string key1,std::string key2)const
+  {
+    return atoi(key1.c_str())<atoi(key2.c_str());
+  }
+};
 class OJmodel{
     private:
-        std::map<std::string,Question> _model;
+        std::map<std::string,Question,cmp> _model;
     public:
         bool Load(){
             //加载题目到内存

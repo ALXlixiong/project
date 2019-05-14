@@ -1,0 +1,14 @@
+<html>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <title>online oj</title>
+    <head>
+    </head>
+    <body>
+        <h2>题目列表</h2>
+        {{#question}}
+        <div>
+            <a href = "/question/{{id}}">{{id}}.{{name}}.{{star}}</a>
+        </div>
+        {{/question}}
+    </body>
+</html>
