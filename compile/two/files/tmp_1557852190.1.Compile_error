@@ -1,0 +1,3 @@
+./files/tmp_1557852190.1.cpp:2:15: error: expected constructor, destructor, or type conversion before ‘for’
+  * Definition for singly-linked list.
+               ^
