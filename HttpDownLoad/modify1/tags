@@ -1,0 +1,45 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Client	client.hpp	/^        Client(std::string url)$/;"	f	class:Client
+Client	client.hpp	/^class Client$/;"	c
+HTTP	parseurl.hpp	/^    HTTP,$/;"	e	enum:Status
+HTTPS	parseurl.hpp	/^    HTTPS,$/;"	e	enum:Status
+OTHER	parseurl.hpp	/^    OTHER$/;"	e	enum:Status
+Parse	parseurl.hpp	/^class Parse{$/;"	c
+Status	parseurl.hpp	/^enum Status{$/;"	g
+Writen	client.hpp	/^        ssize_t Writen(int sock,std::string str,int size)$/;"	f	class:Client
+_begin	client.hpp	/^        uint64_t _begin;$/;"	m	class:thread_information
+_end	client.hpp	/^        uint64_t _end;$/;"	m	class:thread_information
+_file_bag	client.hpp	/^        file_information _file_bag;$/;"	m	class:Client
+_file_name	client.hpp	/^        std::string _file_name;$/;"	m	class:file_information
+_file_name_td	client.hpp	/^        std::string _file_name_td;$/;"	m	class:file_information
+_file_path	client.hpp	/^        std::string _file_path;$/;"	m	class:file_information
+_file_size	client.hpp	/^        uint64_t _file_size;$/;"	m	class:file_information
+_fqdn	client.hpp	/^        std::string _fqdn;$/;"	m	class:Client
+_pid	client.hpp	/^        pthread_t _pid;$/;"	m	class:thread_information
+_port	client.hpp	/^        int _port;$/;"	m	class:Client
+_pthread_number	client.hpp	/^        int _pthread_number;$/;"	m	class:Client
+_read_byte	client.hpp	/^        uint64_t _read_byte;$/;"	m	class:thread_information
+_sock	client.hpp	/^        int _sock;$/;"	m	class:Client
+_thread_bag	client.hpp	/^        thread_information _thread_bag;$/;"	m	class:Client
+_url	client.hpp	/^        std::string _url;$/;"	m	class:Client
+_write_byte	client.hpp	/^        uint64_t _write_byte;$/;"	m	class:thread_information
+client_run	client.hpp	/^        void client_run()$/;"	f	class:Client
+download_file	client.hpp	/^        void download_file()$/;"	f	class:Client
+file_information	client.hpp	/^class file_information$/;"	c
+get_file_name	parseurl.hpp	/^        static std::string get_file_name(std::string fqdn)$/;"	f	class:Parse
+get_file_name_td	parseurl.hpp	/^        static std::string get_file_name_td(std::string name)$/;"	f	class:Parse
+get_file_path	parseurl.hpp	/^        static std::string get_file_path(std::string fqdn)$/;"	f	class:Parse
+get_fqdn	parseurl.hpp	/^        static std::string get_fqdn(std::string url)$/;"	f	class:Parse
+get_host_ip	parseurl.hpp	/^        static struct hostent* get_host_ip(std::string &fqdn)$/;"	f	class:Parse
+judge_is_http	parseurl.hpp	/^        static Status judge_is_http(std::string url)$/;"	f	class:Parse
+main	httpmain.cc	/^int main()$/;"	f
+parse_httphead	client.hpp	/^        void parse_httphead(std::string http_request)$/;"	f	class:Client
+parse_status_code	client.hpp	/^        void parse_status_code(std::string http_response)$/;"	f	class:Client
+thread_information	client.hpp	/^class thread_information$/;"	c
+writen	client.hpp	/^        ssize_t writen(int sock,std::string str,int size)$/;"	f	class:Client
+~Client	client.hpp	/^        ~Client()$/;"	f	class:Client
