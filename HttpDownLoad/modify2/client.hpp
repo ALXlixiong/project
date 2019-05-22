@@ -30,7 +30,8 @@ class Client
             _pool.pthreadPoolInit();
             _sock = -1;
             _port = 80;
-            _pthread_number = get_nprocs();//获取当前可使用CPU个数，以达到多线程最优
+            _pthread_number = 3;
+            //_pthread_number = get_nprocs();//获取当前可使用CPU个数，以达到多线程最优
             //如果创建线程个数太多，反而会增大CPU调度压力
             std::string fqdn = Parse::get_fqdn(url);
             _fqdn = fqdn.substr(0,fqdn.find('/'));
@@ -122,6 +123,7 @@ class Client
                 thread_array[i]._begin = start;
                 start += avg_byte;
                 thread_array[i]._end = start;
+                start += 1;
             }
             //最后一个线程需要特殊考虑，因为求字节平均值
             //会造成精度的损失，所以最后一个字节特殊考虑
@@ -255,37 +257,14 @@ class Client
                         exit(-1);
                     }
                 }
-                std::cout<<"ret:"<<ret<<std::endl;
                 std::string tmp = "";
                 for(int i = 0;i<ret;++i){
                     tmp += buff[i];
                 }
                 Writen(file_fd,tmp,ret);
                 thread_bag._write_byte += ret;
-                std::cout<<"write:"<<thread_bag._write_byte<<std::endl;
             }
-            //while(thread_bag._write_byte != div)
-            //{
-            //    memset(buff,0,sizeof(buff));
-            //    int ret = read(thread_bag._thread_sock,buff,sizeof(buff)-1);
-            //    if(ret<0 && errno == EAGAIN){
-            //        ret = 0;
-            //        std::cout<<"-------------------------\n";
-            //        continue;
-            //    }
-            //    else if(ret < 0)
-            //    {
-            //        std::cerr<<"read error\n";
-            //        break;
-            //    }
-            //    buff[ret] = '\0';
-            //    thread_bag._write_byte += strlen(buff);
-            //    std::string tmp = buff;
-            //    Writen(file_fd,tmp,tmp.size());
-            //    std::cout<<"---------\n";
-            //}
             std::cout<<thread_bag._write_byte<<std::endl;
-
             close(thread_bag._thread_sock);
             close(file_fd);
         }
