@@ -17,6 +17,7 @@ class thread_information
         int _thread_sock;
         std::string _fqdn;
         std::string _url;
+        std::string _file_name_td;
         long int _begin;
         long int _end;
         long int _read_byte;

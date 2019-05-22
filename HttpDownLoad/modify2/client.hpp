@@ -117,6 +117,7 @@ class Client
                 thread_array[i]._read_byte = 0;
                 thread_array[i]._fqdn = _fqdn;
                 thread_array[i]._url = _url;
+                thread_array[i]._file_name_td = _file_bag._file_name_td;
                 thread_array[i]._write_byte = 0;
                 thread_array[i]._begin = start;
                 start += avg_byte;
@@ -128,12 +129,12 @@ class Client
             thread_array[i]._read_byte = 0;
             thread_array[i]._fqdn = _fqdn;
             thread_array[i]._url = _url;
+            thread_array[i]._file_name_td = _file_bag._file_name_td;
             thread_array[i]._write_byte = 0;
             thread_array[i]._begin = start;
             thread_array[i]._end = _file_bag._file_size-1;
             for(int i = 0;i<_pthread_number;++i)
             {
-                std::cout<<"----------\n";
                 Task t(thread_array[i],Client::pthread_route);
                 _pool.pushTask(t);
             }
@@ -181,7 +182,6 @@ class Client
     private:
         static void pthread_route(thread_information thread_bag)
         {
-            std::cout<<"-----------------\n";
             struct sockaddr_in server;
             server.sin_family = AF_INET;
             struct hostent *host = Parse::get_host_ip(thread_bag._fqdn);
@@ -210,6 +210,84 @@ class Client
             http_request += std::to_string(thread_bag._end);
             http_request += "\r\n\r\n";
             std::cout<<http_request<<std::endl;
+            int size = http_request.size();
+            Writen(thread_bag._thread_sock,http_request,size);
+            std::string http_response = "";
+            char ch[1];
+            int index = 0;
+            while(read(thread_bag._thread_sock,ch,1)>0){
+                http_response += ch[0];
+                if(index>4 && http_response[index-3] == '\r' && http_response[index-2] == '\n'
+                        && http_response[index-1] == '\r' && http_response[index] == '\n')
+                {
+                    break;
+                }
+                ++index;
+            }
+            std::cout<<http_response<<std::endl;
+            parse_status_code(http_response);
+            int file_fd = open(thread_bag._file_name_td.c_str(),O_CREAT|O_WRONLY,0644);
+            if(file_fd < 0){
+                std::cerr<<"open file error\n";
+                return;
+            }
+            if(lseek(file_fd,thread_bag._begin,SEEK_SET)<0){
+                std::cerr<<"lseek error\n";
+                return;
+            }
+            long int div = thread_bag._end-thread_bag._begin+1;
+            char buff[1024] = {0};
+            ssize_t ret_read = 0;
+            std::cout<<"div:"<<div<<std::endl;
+            while(thread_bag._write_byte != div)
+            {
+                memset(buff,0,sizeof(buff));
+                int ret = 0;
+                while(1)
+                {
+                    ret = recv(thread_bag._thread_sock,buff,1023,0);
+                    if(ret >= 0)
+                        break;
+                    else if(ret<0 && (errno == EAGAIN||errno == EWOULDBLOCK||errno == EINTR))
+                        continue;
+                    else{
+                        std::cerr<<"recv error\n";
+                        exit(-1);
+                    }
+                }
+                std::cout<<"ret:"<<ret<<std::endl;
+                std::string tmp = "";
+                for(int i = 0;i<ret;++i){
+                    tmp += buff[i];
+                }
+                Writen(file_fd,tmp,ret);
+                thread_bag._write_byte += ret;
+                std::cout<<"write:"<<thread_bag._write_byte<<std::endl;
+            }
+            //while(thread_bag._write_byte != div)
+            //{
+            //    memset(buff,0,sizeof(buff));
+            //    int ret = read(thread_bag._thread_sock,buff,sizeof(buff)-1);
+            //    if(ret<0 && errno == EAGAIN){
+            //        ret = 0;
+            //        std::cout<<"-------------------------\n";
+            //        continue;
+            //    }
+            //    else if(ret < 0)
+            //    {
+            //        std::cerr<<"read error\n";
+            //        break;
+            //    }
+            //    buff[ret] = '\0';
+            //    thread_bag._write_byte += strlen(buff);
+            //    std::string tmp = buff;
+            //    Writen(file_fd,tmp,tmp.size());
+            //    std::cout<<"---------\n";
+            //}
+            std::cout<<thread_bag._write_byte<<std::endl;
+
+            close(thread_bag._thread_sock);
+            close(file_fd);
         }
         long int get_write_in_file_byte(int fd)
         {
@@ -220,7 +298,7 @@ class Client
             }
             return st.st_size;
         }
-        void parse_status_code(std::string http_response)
+        static void parse_status_code(std::string http_response)
         {
             std::string tmp = http_response;
             tmp = tmp.substr(tmp.find(' ')+1);
@@ -234,40 +312,40 @@ class Client
                 exit(-1);
             }
         }
-       // ssize_t readn(int sock,char* buf,int size)
-       // {
-       //     ssize_t read_ret;
-       //     int left_  = size;
-       //     char *tmp = buf;
-       //     while(left_ > 0)
-       //     {
-       //         if((read_ret = read(sock,tmp,left_))<0){
-       //             if(errno == EINTR){
-       //                 read_ret = 0;
-       //             }
-       //             else{
-       //                 return -1;
-       //             }
-       //         }
-       //         else if(read_ret == 0){
-       //             break;
-       //         }
-       //         left_ -= read_ret;
-       //         tmp = tmp.substr(read_ret);
-       //     }
-       //     return size-left_;
-       // }
-       // ssize_t Readn(int sock,std::string str,int size)
-       // {
-       //     ssize_t n = 0;
-       //     if((n = readn(sock,str,size))<0){
-       //         std::cerr<<"readn error\n";
-       //         exit(-1);
-       //     }
-       //     return n;
-       // }
+        //static ssize_t readn(int sock,char(*buf)[1024],int size)
+        //{
+        //    ssize_t read_ret;
+        //    int left_  = size;
+        //    char *tmp = *buf;
+        //    while(left_ > 0)
+        //    {
+        //        if((read_ret = read(sock,tmp,left_))<0){
+        //            if(errno == EINTR){
+        //                read_ret = 0;
+        //            }
+        //            else{
+        //                return -1;
+        //            }
+        //        }
+        //        else if(read_ret == 0){
+        //            break;
+        //        }
+        //        left_ -= read_ret;
+        //        tmp += read_ret;
+        //    }
+        //    return size-left_;
+        //}
+        //static ssize_t Readn(int sock,char(*str)[1024],int size)
+        //{
+        //    ssize_t n = 0;
+        //    if((n = readn(sock,str,size))<0){
+        //        std::cerr<<"readn error\n";
+        //        exit(-1);
+        //    }
+        //    return n;
+        //}
 
-        ssize_t writen(int sock,std::string str,int size)
+        static ssize_t writen(int sock,std::string str,int size)
         {
             ssize_t write_ret;
             std::string tmp = str;
@@ -288,7 +366,7 @@ class Client
             }
             return size;
         }
-        ssize_t Writen(int sock,std::string str,int size)
+        static ssize_t Writen(int sock,std::string str,int size)
         {
             int n = 0;
             if((n == writen(sock,str,size))<0){
