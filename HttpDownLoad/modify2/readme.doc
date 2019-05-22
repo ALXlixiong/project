@@ -1,0 +1,7 @@
+##使用方法##
+
+1.通过 make 生成可执行文件 httpmain
+2.输入完整的http网站。例如：http://static.jszg.edu.cn/public/184/aTUb6DkdOsE0OQWo1Nys.doc
+3.在client.hpp内部除了可以通过系统调用函数获取当前主机空闲CPU个数来确定多线程个数
+        之外，还可以自己设置线程数量。多线程是通过线程池实现。
+

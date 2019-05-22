@@ -14,6 +14,7 @@ class thread_information
 {
     public:
         pthread_t _pid;
+        int _thread_id;
         int _thread_sock;
         std::string _fqdn;
         std::string _url;

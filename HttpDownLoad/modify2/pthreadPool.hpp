@@ -15,13 +15,10 @@ class Task
     Task(thread_information thread,handle_t handle)
       :_thread(thread)
       ,_handle(handle)
-    {
-        std::cout<<"chu shi hua\n";
-    }
+    {}
     
     void Run()
     {
-        std::cout<<"run-------\n";
         _handle(_thread);
     }
 };

@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "pthreadPool.hpp"
+#include "singleton.hpp"
 class Client
 {
     private:
@@ -30,7 +31,7 @@ class Client
             _pool.pthreadPoolInit();
             _sock = -1;
             _port = 80;
-            _pthread_number = 3;
+            _pthread_number = 10;
             //_pthread_number = get_nprocs();//获取当前可使用CPU个数，以达到多线程最优
             //如果创建线程个数太多，反而会增大CPU调度压力
             std::string fqdn = Parse::get_fqdn(url);
@@ -117,6 +118,7 @@ class Client
                 thread_array[i]._thread_sock = -1;
                 thread_array[i]._read_byte = 0;
                 thread_array[i]._fqdn = _fqdn;
+                thread_array[i]._thread_id = i+1;
                 thread_array[i]._url = _url;
                 thread_array[i]._file_name_td = _file_bag._file_name_td;
                 thread_array[i]._write_byte = 0;
@@ -130,14 +132,17 @@ class Client
             thread_array[i]._thread_sock = -1;
             thread_array[i]._read_byte = 0;
             thread_array[i]._fqdn = _fqdn;
+            thread_array[i]._thread_id = i+1;
             thread_array[i]._url = _url;
             thread_array[i]._file_name_td = _file_bag._file_name_td;
             thread_array[i]._write_byte = 0;
             thread_array[i]._begin = start;
             thread_array[i]._end = _file_bag._file_size-1;
+            Singleton *m_instance = Singleton::GetInstance();
+            m_instance->thread_array_init(thread_array);
             for(int i = 0;i<_pthread_number;++i)
             {
-                Task t(thread_array[i],Client::pthread_route);
+                Task t(m_instance->thread_array[i],Client::pthread_route);
                 _pool.pushTask(t);
             }
             while(1);
@@ -261,6 +266,7 @@ class Client
                 for(int i = 0;i<ret;++i){
                     tmp += buff[i];
                 }
+                std::cout<<"-----"<<thread_bag._thread_id<<"------\n";
                 Writen(file_fd,tmp,ret);
                 thread_bag._write_byte += ret;
             }
