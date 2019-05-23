@@ -1,0 +1,94 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Client	client.hpp	/^        Client(std::string url)$/;"	f	class:Client
+Client	client.hpp	/^class Client$/;"	c
+GetInstance	singleton.hpp	/^        static Singleton* GetInstance()$/;"	f	class:Singleton
+HTTP	parseurl.hpp	/^    HTTP,$/;"	e	enum:Status
+HTTPS	parseurl.hpp	/^    HTTPS,$/;"	e	enum:Status
+OTHER	parseurl.hpp	/^    OTHER$/;"	e	enum:Status
+Parse	parseurl.hpp	/^class Parse{$/;"	c
+PopTaskQueue	pthreadPool.hpp	/^    Task PopTaskQueue()$/;"	f	class:pthreadPool
+Run	pthreadPool.hpp	/^    void Run()$/;"	f	class:Task
+Singleton	singleton.hpp	/^        Singleton(){$/;"	f	class:Singleton
+Singleton	singleton.hpp	/^class Singleton$/;"	c
+Status	parseurl.hpp	/^enum Status{$/;"	g
+Task	pthreadPool.hpp	/^    Task(thread_information &thread,handle_t handle)$/;"	f	class:Task
+Task	pthreadPool.hpp	/^class Task $/;"	c
+WakeUpIdle	pthreadPool.hpp	/^    void WakeUpIdle()$/;"	f	class:pthreadPool
+Writen	client.hpp	/^        static ssize_t Writen(int sock,std::string str,int size)$/;"	f	class:Client
+_begin	comm.hpp	/^        long int _begin;$/;"	m	class:thread_information
+_cond	pthreadPool.hpp	/^    pthread_cond_t _cond;$/;"	m	class:pthreadPool
+_end	comm.hpp	/^        long int _end;$/;"	m	class:thread_information
+_file_bag	client.hpp	/^        file_information _file_bag;$/;"	m	class:Client
+_file_name	comm.hpp	/^        std::string _file_name;$/;"	m	class:file_information
+_file_name_td	comm.hpp	/^        std::string _file_name_td;$/;"	m	class:file_information
+_file_name_td	comm.hpp	/^        std::string _file_name_td;$/;"	m	class:thread_information
+_file_path	comm.hpp	/^        std::string _file_path;$/;"	m	class:file_information
+_file_size	comm.hpp	/^        long int _file_size;$/;"	m	class:file_information
+_fqdn	client.hpp	/^        std::string _fqdn;$/;"	m	class:Client
+_fqdn	comm.hpp	/^        std::string _fqdn;$/;"	m	class:thread_information
+_handle	pthreadPool.hpp	/^    handle_t _handle;$/;"	m	class:Task
+_idle	pthreadPool.hpp	/^    int _idle;\/\/空闲的线程$/;"	m	class:pthreadPool
+_mutex	pthreadPool.hpp	/^    pthread_mutex_t _mutex;$/;"	m	class:pthreadPool
+_nums	pthreadPool.hpp	/^    int _nums;\/\/创建多少线程$/;"	m	class:pthreadPool
+_pid	comm.hpp	/^        pthread_t _pid;$/;"	m	class:thread_information
+_pool	client.hpp	/^        pthreadPool _pool;$/;"	m	class:Client
+_port	client.hpp	/^        int _port;$/;"	m	class:Client
+_pthread_number	client.hpp	/^        int _pthread_number;$/;"	m	class:Client
+_read_byte	comm.hpp	/^        long int _read_byte;$/;"	m	class:thread_information
+_sock	client.hpp	/^        int _sock;$/;"	m	class:Client
+_thread	pthreadPool.hpp	/^    thread_information &_thread;$/;"	m	class:Task
+_thread_bag	client.hpp	/^        thread_information _thread_bag;$/;"	m	class:Client
+_thread_id	comm.hpp	/^        int _thread_id;$/;"	m	class:thread_information
+_thread_sock	comm.hpp	/^        int _thread_sock;$/;"	m	class:thread_information
+_url	client.hpp	/^        std::string _url;$/;"	m	class:Client
+_url	comm.hpp	/^        std::string _url;$/;"	m	class:thread_information
+_write_byte	comm.hpp	/^        long int _write_byte;$/;"	m	class:thread_information
+client_run	client.hpp	/^        void client_run()$/;"	f	class:Client
+cycle	singleton.hpp	/^        class cycle$/;"	c	class:Singleton
+download_file	client.hpp	/^        void download_file()$/;"	f	class:Client
+endflag	singleton.hpp	/^                static cycle endflag;$/;"	m	class:Singleton::cycle
+endflag	singleton.hpp	/^Singleton::cycle Singleton::cycle::endflag;$/;"	m	class:Singleton::cycle
+file_information	comm.hpp	/^        file_information(){}$/;"	f	class:file_information
+file_information	comm.hpp	/^class file_information$/;"	c
+get_file_name	parseurl.hpp	/^        static std::string get_file_name(std::string fqdn)$/;"	f	class:Parse
+get_file_name_td	parseurl.hpp	/^        static std::string get_file_name_td(std::string name)$/;"	f	class:Parse
+get_file_path	parseurl.hpp	/^        static std::string get_file_path(std::string fqdn)$/;"	f	class:Parse
+get_fqdn	parseurl.hpp	/^        static std::string get_fqdn(std::string url)$/;"	f	class:Parse
+get_host_ip	parseurl.hpp	/^        static struct hostent* get_host_ip(std::string &fqdn)$/;"	f	class:Parse
+get_write_in_file_byte	client.hpp	/^        long int get_write_in_file_byte(int fd)$/;"	f	class:Client
+handle_t	pthreadPool.hpp	/^typedef void (*handle_t)(thread_information); $/;"	t
+idleTaskQueue	pthreadPool.hpp	/^    void idleTaskQueue()$/;"	f	class:pthreadPool
+isTaskQueueEmpty	pthreadPool.hpp	/^    bool isTaskQueueEmpty()$/;"	f	class:pthreadPool
+judge_is_http	parseurl.hpp	/^        static Status judge_is_http(std::string &url)$/;"	f	class:Parse
+lockTaskQueue	pthreadPool.hpp	/^    void lockTaskQueue()$/;"	f	class:pthreadPool
+m_pInstance	singleton.hpp	/^        static Singleton *m_pInstance;\/\/单例对象指针$/;"	m	class:Singleton
+m_pInstance	singleton.hpp	/^Singleton* Singleton::m_pInstance = nullptr;$/;"	m	class:Singleton
+main	httpmain.cc	/^int main()$/;"	f
+mutex	singleton.hpp	/^        static pthread_mutex_t mutex;$/;"	m	class:Singleton
+mutex	singleton.hpp	/^pthread_mutex_t Singleton::mutex;$/;"	m	class:Singleton
+parse_httphead	client.hpp	/^        void parse_httphead(std::string http_request)$/;"	f	class:Client
+parse_status_code	client.hpp	/^        static void parse_status_code(std::string http_response)$/;"	f	class:Client
+pthreadPool	pthreadPool.hpp	/^    pthreadPool(int nums = 10)$/;"	f	class:pthreadPool
+pthreadPool	pthreadPool.hpp	/^class pthreadPool$/;"	c
+pthreadPoolInit	pthreadPool.hpp	/^    void pthreadPoolInit()$/;"	f	class:pthreadPool
+pthread_route	client.hpp	/^        static void pthread_route(thread_information thread_bag)$/;"	f	class:Client
+pthread_route	pthreadPool.hpp	/^    static void *pthread_route(void *arg)$/;"	f	class:pthreadPool
+pushTask	pthreadPool.hpp	/^    void pushTask(Task t)$/;"	f	class:pthreadPool
+s	singleton.hpp	/^        Singleton operator=(Singleton& s) = delete;$/;"	m	class:Singleton
+s	singleton.hpp	/^        Singleton(const Singleton& s) = delete;$/;"	m	class:Singleton
+task_queue	pthreadPool.hpp	/^    std::queue<Task> task_queue;$/;"	m	class:pthreadPool
+thread_array	singleton.hpp	/^        std::vector<thread_information> thread_array;$/;"	m	class:Singleton
+thread_array_init	singleton.hpp	/^        void thread_array_init(std::vector<thread_information> &tmp)$/;"	f	class:Singleton
+thread_information	comm.hpp	/^        thread_information(){}$/;"	f	class:thread_information
+thread_information	comm.hpp	/^class thread_information$/;"	c
+unlockTaskQueue	pthreadPool.hpp	/^    void unlockTaskQueue()$/;"	f	class:pthreadPool
+writen	client.hpp	/^        static ssize_t writen(int sock,std::string str,int size)$/;"	f	class:Client
+~Client	client.hpp	/^        ~Client()$/;"	f	class:Client
+~Singleton	singleton.hpp	/^        ~Singleton()$/;"	f	class:Singleton
+~cycle	singleton.hpp	/^                ~cycle()$/;"	f	class:Singleton::cycle
+~pthreadPool	pthreadPool.hpp	/^    ~pthreadPool()$/;"	f	class:pthreadPool
