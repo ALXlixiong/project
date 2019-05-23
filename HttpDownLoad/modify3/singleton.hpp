@@ -42,7 +42,7 @@ class Singleton
         Singleton operator=(Singleton& s) = delete;
         ~Singleton()
         {
-            std::cout<<"----------------end---------------------\n";
+            std::cout<<"----------------singleton---------------------\n";
             //如果存在seek_file文件，需要清空文件内容，保存新的断点位置
             if(access("./seek_file.txt",F_OK) == 0){
                 remove("./seek_file.txt");
@@ -66,7 +66,10 @@ class Singleton
                 }
             }
         }
-
+        void UpdateThreadArray(thread_information tmp)
+        {
+            thread_array[tmp._thread_id-1]._write_byte = tmp._write_byte;
+        }
     public:
         void thread_array_init(std::vector<thread_information> tmp)
         {

@@ -141,7 +141,9 @@ class Client
                     exit(-1);
                 }
             }
-            sleep(5);
+            std::cout<<"END\n";
+            sleep(10);
+            
         }
 
         void client_run()
@@ -246,8 +248,10 @@ class Client
                 while(1)
                 {
                     ret = recv(thread_bag._thread_sock,buff,1023,0);
-                    if(ret >= 0)
+                    if(ret >= 0){
+                        usleep(1000);
                         break;
+                    }
                     else if(ret<0 && (errno == EAGAIN||errno == EWOULDBLOCK||errno == EINTR))
                         continue;
                     else{
@@ -262,6 +266,23 @@ class Client
                 Writen(file_fd,tmp,ret);
                 thread_bag._write_byte += ret;
                 thread_bag._read_byte += ret;
+                std::string filepath = "./id/";
+                filepath += std::to_string(thread_bag._thread_id);
+                filepath += ".txt";
+                int fd = open(filepath.c_str(),O_CREAT|O_WRONLY|O_APPEND,0644);
+                if(fd<0){
+                    std::cerr<<"id file open error\n";
+                    break;
+                }
+                std::string word = std::to_string(thread_bag._thread_id);
+                word += " ";
+                word += std::to_string(thread_bag._begin + thread_bag._write_byte);
+                word += '\n';
+                if(write(fd,word.c_str(),word.size()) != word.size()){
+                    std::cerr<<"write if file error\n";
+                    break;
+                }
+                usleep(1000);
             }
             close(thread_bag._thread_sock);
             close(file_fd);
