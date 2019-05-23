@@ -100,10 +100,12 @@ class Client
                 {
                     thread_array[i]._thread_sock = -1;
                     thread_array[i]._read_byte = 0;
+                    thread_array[i]._file_size = _file_bag._file_size;
                     thread_array[i]._fqdn = _fqdn;
                     thread_array[i]._thread_id = i+1;
                     thread_array[i]._url = _url;
                     thread_array[i]._file_name_td = _file_bag._file_name_td;
+                    thread_array[i]._file_name = _file_bag._file_name;
                     thread_array[i]._write_byte = 0;
                     thread_array[i]._begin = start;
                     start += avg_byte;
@@ -114,8 +116,10 @@ class Client
                 //会造成精度的损失，所以最后一个字节特殊考虑
                 thread_array[i]._thread_sock = -1;
                 thread_array[i]._read_byte = 0;
+                thread_array[i]._file_size = _file_bag._file_size;
                 thread_array[i]._fqdn = _fqdn;
                 thread_array[i]._thread_id = i+1;
+                thread_array[i]._file_name = _file_bag._file_name;
                 thread_array[i]._url = _url;
                 thread_array[i]._file_name_td = _file_bag._file_name_td;
                 thread_array[i]._write_byte = 0;

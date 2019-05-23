@@ -82,6 +82,16 @@ class Singleton
                 }
             }
             std::cout<<"删除所有id文件"<<std::endl;
+            //如果seek_file.txt最后一行的第一个数字等于文件的大小，那么说明文件已经下载完成
+            //需要删除seek_file.txt,并且对文件重命名
+            std::string last_line = "";
+            getLastLine("./seek_file.txt",last_line);
+            std::string tmp = last_line.substr(0,last_line.find(' '));
+            if(tmp == std::to_string(thread_array[0]._file_size))
+            {
+                unlink("./seek_file.txt");
+                rename(thread_array[0]._file_name_td.c_str(),thread_array[0]._file_name.c_str());
+            }
         }
         //void UpdateThreadArray(thread_information tmp)
         //{
@@ -92,9 +102,9 @@ class Singleton
         {
             std::string line;
             std::ifstream file(path.c_str());
-            if(file.is_open()){
-                std::cerr<<"file is_open error\n";
-            }
+            //if(file.is_open()){
+            //    std::cerr<<"file is_open error\n";
+            //}
             while(std::getline(file,line))
                 last_line = line;
             file.close();
