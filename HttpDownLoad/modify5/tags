@@ -6,7 +6,9 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 Client	client.hpp	/^        Client(std::string url)$/;"	f	class:Client
 Client	client.hpp	/^class Client$/;"	c
+FileUtil	util.hpp	/^class FileUtil$/;"	c
 GetInstance	singleton.hpp	/^        static Singleton* GetInstance()$/;"	f	class:Singleton
+GetLine	util.hpp	/^        static void GetLine(int file_id,std::string &line)$/;"	f	class:FileUtil
 HTTP	parseurl.hpp	/^    HTTP,$/;"	e	enum:Status
 HTTPS	parseurl.hpp	/^    HTTPS,$/;"	e	enum:Status
 OTHER	parseurl.hpp	/^    OTHER$/;"	e	enum:Status
@@ -16,7 +18,7 @@ Run	pthreadPool.hpp	/^    void Run()$/;"	f	class:Task
 Singleton	singleton.hpp	/^        Singleton(){$/;"	f	class:Singleton
 Singleton	singleton.hpp	/^class Singleton$/;"	c
 Status	parseurl.hpp	/^enum Status{$/;"	g
-Task	pthreadPool.hpp	/^    Task(thread_information &thread,handle_t handle)$/;"	f	class:Task
+Task	pthreadPool.hpp	/^    Task(thread_information thread,handle_t handle)$/;"	f	class:Task
 Task	pthreadPool.hpp	/^class Task $/;"	c
 WakeUpIdle	pthreadPool.hpp	/^    void WakeUpIdle()$/;"	f	class:pthreadPool
 Writen	client.hpp	/^        static ssize_t Writen(int sock,std::string str,int size)$/;"	f	class:Client
@@ -25,10 +27,12 @@ _cond	pthreadPool.hpp	/^    pthread_cond_t _cond;$/;"	m	class:pthreadPool
 _end	comm.hpp	/^        long int _end;$/;"	m	class:thread_information
 _file_bag	client.hpp	/^        file_information _file_bag;$/;"	m	class:Client
 _file_name	comm.hpp	/^        std::string _file_name;$/;"	m	class:file_information
+_file_name	comm.hpp	/^        std::string _file_name;$/;"	m	class:thread_information
 _file_name_td	comm.hpp	/^        std::string _file_name_td;$/;"	m	class:file_information
 _file_name_td	comm.hpp	/^        std::string _file_name_td;$/;"	m	class:thread_information
 _file_path	comm.hpp	/^        std::string _file_path;$/;"	m	class:file_information
 _file_size	comm.hpp	/^        long int _file_size;$/;"	m	class:file_information
+_file_size	comm.hpp	/^        long int _file_size;$/;"	m	class:thread_information
 _fqdn	client.hpp	/^        std::string _fqdn;$/;"	m	class:Client
 _fqdn	comm.hpp	/^        std::string _fqdn;$/;"	m	class:thread_information
 _handle	pthreadPool.hpp	/^    handle_t _handle;$/;"	m	class:Task
@@ -41,13 +45,14 @@ _port	client.hpp	/^        int _port;$/;"	m	class:Client
 _pthread_number	client.hpp	/^        int _pthread_number;$/;"	m	class:Client
 _read_byte	comm.hpp	/^        long int _read_byte;$/;"	m	class:thread_information
 _sock	client.hpp	/^        int _sock;$/;"	m	class:Client
-_thread	pthreadPool.hpp	/^    thread_information &_thread;$/;"	m	class:Task
+_thread	pthreadPool.hpp	/^    thread_information _thread;$/;"	m	class:Task
 _thread_bag	client.hpp	/^        thread_information _thread_bag;$/;"	m	class:Client
 _thread_id	comm.hpp	/^        int _thread_id;$/;"	m	class:thread_information
 _thread_sock	comm.hpp	/^        int _thread_sock;$/;"	m	class:thread_information
 _url	client.hpp	/^        std::string _url;$/;"	m	class:Client
 _url	comm.hpp	/^        std::string _url;$/;"	m	class:thread_information
 _write_byte	comm.hpp	/^        long int _write_byte;$/;"	m	class:thread_information
+argc	httpmain.cc	/^void argc(int sig)$/;"	f
 client_run	client.hpp	/^        void client_run()$/;"	f	class:Client
 cycle	singleton.hpp	/^        class cycle$/;"	c	class:Singleton
 download_file	client.hpp	/^        void download_file()$/;"	f	class:Client
@@ -55,6 +60,8 @@ endflag	singleton.hpp	/^                static cycle endflag;$/;"	m	class:Single
 endflag	singleton.hpp	/^Singleton::cycle Singleton::cycle::endflag;$/;"	m	class:Singleton::cycle
 file_information	comm.hpp	/^        file_information(){}$/;"	f	class:file_information
 file_information	comm.hpp	/^class file_information$/;"	c
+getLastLine	singleton.hpp	/^        void getLastLine(std::string path,std::string &last_line)$/;"	f	class:Singleton
+getNline	client.hpp	/^        void getNline(int line,std::string &ret)$/;"	f	class:Client
 get_file_name	parseurl.hpp	/^        static std::string get_file_name(std::string fqdn)$/;"	f	class:Parse
 get_file_name_td	parseurl.hpp	/^        static std::string get_file_name_td(std::string name)$/;"	f	class:Parse
 get_file_path	parseurl.hpp	/^        static std::string get_file_path(std::string fqdn)$/;"	f	class:Parse
@@ -72,7 +79,7 @@ main	httpmain.cc	/^int main()$/;"	f
 mutex	singleton.hpp	/^        static pthread_mutex_t mutex;$/;"	m	class:Singleton
 mutex	singleton.hpp	/^pthread_mutex_t Singleton::mutex;$/;"	m	class:Singleton
 parse_httphead	client.hpp	/^        void parse_httphead(std::string http_request)$/;"	f	class:Client
-parse_status_code	client.hpp	/^        static void parse_status_code(std::string http_response)$/;"	f	class:Client
+parse_status_code	client.hpp	/^        static int parse_status_code(std::string http_response)$/;"	f	class:Client
 pthreadPool	pthreadPool.hpp	/^    pthreadPool(int nums = 10)$/;"	f	class:pthreadPool
 pthreadPool	pthreadPool.hpp	/^class pthreadPool$/;"	c
 pthreadPoolInit	pthreadPool.hpp	/^    void pthreadPoolInit()$/;"	f	class:pthreadPool
@@ -83,7 +90,7 @@ s	singleton.hpp	/^        Singleton operator=(Singleton& s) = delete;$/;"	m	clas
 s	singleton.hpp	/^        Singleton(const Singleton& s) = delete;$/;"	m	class:Singleton
 task_queue	pthreadPool.hpp	/^    std::queue<Task> task_queue;$/;"	m	class:pthreadPool
 thread_array	singleton.hpp	/^        std::vector<thread_information> thread_array;$/;"	m	class:Singleton
-thread_array_init	singleton.hpp	/^        void thread_array_init(std::vector<thread_information> &tmp)$/;"	f	class:Singleton
+thread_array_init	singleton.hpp	/^        void thread_array_init(std::vector<thread_information> tmp)$/;"	f	class:Singleton
 thread_information	comm.hpp	/^        thread_information(){}$/;"	f	class:thread_information
 thread_information	comm.hpp	/^class thread_information$/;"	c
 unlockTaskQueue	pthreadPool.hpp	/^    void unlockTaskQueue()$/;"	f	class:pthreadPool

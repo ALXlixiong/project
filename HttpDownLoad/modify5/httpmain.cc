@@ -3,12 +3,12 @@
 #include <signal.h>
 void argc(int sig)
 {
-    std::cout<<"------------begin------------\n";
+    //std::cout<<"------------begin------------\n";
     //Singleton* m_instance = Singleton::GetInstance();
     //m_instance->~Singleton();
     Singleton::cycle _cycle;
     _cycle.~cycle();
-    std::cout<<"------------end------------\n";
+    //std::cout<<"------------end------------\n";
     exit(0);
 }
 int main()

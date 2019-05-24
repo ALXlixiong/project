@@ -10,6 +10,7 @@
 #include <vector>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/vfs.h>
 #include "pthreadPool.hpp"
 #include "singleton.hpp"
 class Client
@@ -23,6 +24,7 @@ class Client
         thread_information _thread_bag;
         file_information _file_bag;
         pthreadPool _pool;
+        static long int _write_size;
     public:
         
         Client(std::string url)
@@ -84,11 +86,74 @@ class Client
             *end = '\0';
             pos += 16;
             _file_bag._file_size = atol(pos);
+            //判断磁盘剩余空间
+            struct statfs diskInfo;
+            statfs("./", &diskInfo);
+            unsigned long long blocksize = diskInfo.f_bsize; //每个block里包含的字节数
+            unsigned long long availableDisk = diskInfo.f_bavail * blocksize; //可用空间大小
+            if(availableDisk<_file_bag._file_size){
+                std::cerr<<"磁盘剩余空间不足\n";
+                exit(0);
+            }
             std::cout<<"file-size:"<<_file_bag._file_size<<std::endl;
             download_file();
         }
+        bool Judge_is_download()
+        {
+            struct sockaddr_in server;
+            server.sin_family = AF_INET;
+            struct hostent *host = Parse::get_host_ip(_fqdn);
+            server.sin_addr.s_addr = *(int *)host->h_addr_list[0];
+            server.sin_port = htons(80);
+            int sock = socket(AF_INET,SOCK_STREAM,0);
+            if(sock<0){
+                std::cerr<<"socket error\n";
+                exit(-1);
+            }
+            if(connect(sock,(struct sockaddr*)&server,sizeof(server))<0){
+                std::cerr<<"thread connect error\n";
+                exit(-1);
+            }
+            std::string http_request = "";
+            http_request += "GET ";
+            http_request += _url;
+            http_request += " HTTP/1.1\r\n";
+            http_request += "Host: ";
+            http_request += _fqdn;
+            http_request += "\r\nConnection: keep-alive\r\n";
+            http_request += "Range: bytes=";
+            http_request += std::to_string(0);
+            http_request += "-";
+            http_request += std::to_string(10);
+            http_request += "\r\n\r\n";
+            int size = http_request.size();
+            Writen(sock,http_request,size);
+            std::string http_response = "";
+            char ch[1];
+            int index = 0;
+            while(read(sock,ch,1)>0){
+                http_response += ch[0];
+                if(index>4 && http_response[index-3] == '\r' && http_response[index-2] == '\n'
+                        && http_response[index-1] == '\r' && http_response[index] == '\n')
+                {
+                    break;
+                }
+                ++index;
+            }
+            int ret = parse_status_code(http_response);
+            if(ret == "200"){
+                std::cout<<"不支持分段下载\n";
+                return false;
+            }
+            return true;
+        }
         void download_file()
         {
+            //在多线程下载之前，需要先判断是否支持分段下载
+            if(!Judge_is_download()){
+                _pthread_number = 1;
+            }
+
             std::vector<thread_information> thread_array(_pthread_number);
             //如果*td不存在，则为一个新的下载
             long int avg_byte = 0;
@@ -111,7 +176,7 @@ class Client
                     start += avg_byte;
                     thread_array[i]._end = start;
                     start += 1;
-                    std::cout<<thread_array[i]._begin<<"  "<<thread_array[i]._end<<std::endl; 
+                    //std::cout<<thread_array[i]._begin<<"  "<<thread_array[i]._end<<std::endl; 
                 }
                 //最后一个线程需要特殊考虑，因为求字节平均值
                 //会造成精度的损失，所以最后一个字节特殊考虑
@@ -126,7 +191,7 @@ class Client
                 thread_array[i]._write_byte = 0;
                 thread_array[i]._begin = start;
                 thread_array[i]._end = _file_bag._file_size-1;
-                std::cout<<thread_array[i]._begin<<"  "<<thread_array[i]._end<<std::endl; 
+                //std::cout<<thread_array[i]._begin<<"  "<<thread_array[i]._end<<std::endl; 
                 //std::cout<<"---------------id:"<<i+1<<std::endl;
                 //std::cout<<"---------------thread_array"<<thread_array[i]._begin<<std::endl;
                 //std::cout<<"---------------thread_array"<<thread_array[i]._end<<std::endl;
@@ -153,15 +218,15 @@ class Client
                     std::string first = nline.substr(0,nline.find(" "));
                     if(first == "" && i == 0){
                         first = "0";
-                        std::cout<<"-------------lalala--------\n";
+                        //std::cout<<"-------------lalala--------\n";
                     }
                     else if(first == ""){
                         std::string tmp = "";
                         getNline(i,tmp);
-                        std::cout<<"-------------hehehe--------\n";
+                        //std::cout<<"-------------hehehe--------\n";
                         first = tmp.substr(tmp.find(" ")+1);
                         long int num = atol(first.c_str());
-                        num += 1024;
+                        num += 1;
                         first = std::to_string(num);
                     }
                     std::string second = nline.substr(nline.find(" ")+1);
@@ -176,7 +241,7 @@ class Client
                     thread_array[i]._write_byte = 0; 
                     thread_array[i]._begin = atol(first.c_str());
                     thread_array[i]._end = atol(second.c_str());
-                    std::cout<<thread_array[i]._begin<<"  "<<thread_array[i]._end<<std::endl; 
+                    //std::cout<<thread_array[i]._begin<<"  "<<thread_array[i]._end<<std::endl; 
                 }
                 Singleton *m_instance = Singleton::GetInstance();
                 m_instance->thread_array_init(thread_array);
@@ -186,9 +251,35 @@ class Client
                     _pool.pushTask(t);
                 }
             }
-            std::cout<<"END\n";
-            sleep(10);
-            
+            //std::cout<<"END\n";
+            //打印进度条
+            char *table = "|/-\\";
+            int index = 0;
+            char bar[120];
+
+            //usleep(2000);
+            //std::ifstream file("./seek_file.txt");
+            while(1){
+                //读取seek文件最后一行就是字节数
+                //std::string last_line = "";
+                //std::string line = "";
+                //while(std::getline(file,line))
+                //    last_line = line;
+                //std::string first = last_line.substr(0,last_line.find(" "));
+                //long int count = atol(first.c_str());
+                long int count = _write_size;
+                double percent = ((double)count/(double)(_file_bag._file_size))*100;
+                while(index<=(int)percent){
+                    printf("[%-100s] [%d%%][%c]\r",bar,(int)percent,table[index%4]);
+                    fflush(stdout);
+                    bar[index++] = '#';
+                    bar[index] = '\0';
+                }
+                if(count == _file_bag._file_size){
+                    std::cout<<"\n下载完成\n";
+                    break;
+                }
+            }
         }
 
         void client_run()
@@ -225,7 +316,7 @@ class Client
             http_request += " HTTP/1.1\r\nHost: ";
             http_request += _fqdn;
             http_request += "\r\nConnection: close\r\n\r\n";
-            std::cout<<http_request<<std::endl;
+            //std::cout<<http_request<<std::endl;
             //
             parse_httphead(http_request);
         }
@@ -318,6 +409,7 @@ class Client
                 Writen(file_fd,tmp,ret);
                 thread_bag._write_byte += ret;
                 thread_bag._read_byte += ret;
+                _write_size += ret;
                 std::string filepath = "./id/";
                 filepath += std::to_string(thread_bag._thread_id);
                 filepath += ".txt";
@@ -334,7 +426,7 @@ class Client
                     break;
                 }
                 close(fd);
-                usleep(6000);
+                usleep(7000);
             }
             close(thread_bag._thread_sock);
             close(file_fd);
@@ -348,7 +440,7 @@ class Client
             }
             return st.st_size;
         }
-        static void parse_status_code(std::string http_response)
+        static int parse_status_code(std::string http_response)
         {
             std::string tmp = http_response;
             tmp = tmp.substr(tmp.find(' ')+1);
@@ -361,6 +453,10 @@ class Client
                 std::cerr<<"not found\n";
                 exit(-1);
             }
+            else if(tmp == "200"){
+                return 200;
+            }
+            return 206;
         }
         //static ssize_t readn(int sock,char(*buf)[1024],int size)
         //{
@@ -426,3 +522,4 @@ class Client
             return n;
         }
 };
+long int Client::_write_size = 0;
